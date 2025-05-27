@@ -1,0 +1,71 @@
+RAPORT DE ANALIZĂ BUSINESS - TRIMESTRUL 3, 2025
+
+Data: 15 octombrie 2025
+Autor: Elena Popescu, Director General
+Email: elena.popescu@techcorp.ro
+Telefon: +40723456789
+
+INFORMAȚII DESPRE COMPANIE:
+TechCorp România SRL este o companie de tehnologie cu sediul în București, pe Calea Victoriei nr. 125, sector 1. Compania a fost înființată în anul 2019 și are în prezent 150 de angajați.
+
+PERFORMANȚE FINANCIARE:
+- Cifra de afaceri Q3 2025: 2.5 milioane EUR
+- Profit net: 450,000 EUR  
+- Creștere față de Q2 2025: 12%
+- Buget alocat pentru Q4 2025: 800,000 EUR
+
+PARTENERI STRATEGICI:
+1. Microsoft România - contract de 500,000 USD pentru implementare Azure
+2. Amazon Web Services - parteneriat pentru servicii cloud
+3. Oracle Corporation - licențe software în valoare de 150,000 EUR
+4. IBM România - consultanță tehnică
+
+CLIENȚI IMPORTANȚI:
+- Banca Transilvania (contract: 300,000 EUR)
+- eMAG România (proiect e-commerce: 250,000 EUR)
+- Dacia Automobile - sistem ERP implementat în uzina din Mioveni
+- Petrom SA - aplicație mobilă pentru stații
+
+ECHIPA DE MANAGEMENT:
+• Elena Popescu - Director General (10 ani experiență la IBM)
+• Andrei Ionescu - CTO (andrei.ionescu@techcorp.ro)
+• Maria Georgescu - CFO (maria.georgescu@techcorp.ro)
+• Alexandru Dumitrescu - Director Marketing
+
+LOCAȚII OPERAȚIONALE:
+- Sediul central: București, Calea Victoriei 125
+- Birou secundar: Cluj-Napoca, strada Memorandumului nr. 45
+- Centru de dezvoltare: Timișoara, Piața Victoriei nr. 12
+- Reprezentanță: Iași, Bulevardul Independenței nr. 80
+
+PROIECTE CURENTE:
+1. Implementare sistem CRM pentru Vodafone România (deadline: 31 decembrie 2025)
+2. Dezvoltare aplicație banking pentru BCR (lansare: februarie 2026)
+3. Migrare cloud pentru UiPath România (buget: 400,000 EUR)
+
+DATE CONTACT IMPORTANTE:
+- Cont bancar principal: RO49RNCB0082002345670001 (BCR)
+- Cont secundar: RO25BTRL12345678901234567890 (Banca Transilvania)
+- Registrul Comerțului: J40/8765/2019
+- CUI: RO38745692
+
+ÎNTÂLNIRI PROGRAMATE:
+- 20 octombrie 2025, 14:00 - Prezentare la Google România (București)
+- 25 octombrie 2025, 10:30 - Negocieri cu SAP România (Cluj-Napoca)
+- 30 octombrie 2025, 16:00 - Demo pentru Orange România
+
+OBIECTIVE Q4 2025:
+• Semnarea a 3 contracte noi în valoare totală de 1 milion EUR
+• Angajarea a 15 dezvoltatori senior
+• Deschiderea unui nou birou în Constanța
+• Certificarea ISO 27001 pentru securitate informatică
+
+CONTACTE INTERNAȚIONALE:
+- John Smith, Microsoft Seattle: john.smith@microsoft.com
+- Pierre Dubois, SAP Paris: pierre.dubois@sap.com  
+- Hans Mueller, BMW München: hans.mueller@bmw.de
+
+Pentru mai multe informații, contactați departamentul de comunicare la comunicare@techcorp.ro sau vizitați website-ul nostru www.techcorp.ro.
+
+Document confidențial - distribuite doar către membrii board-ului.
+© 2025 TechCorp România SRL. Toate drepturile rezervate.

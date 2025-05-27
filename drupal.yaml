@@ -1,0 +1,111 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: drupal-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drupal
+spec:
+  replicas: 2  # Conform cerintei, 2 replici
+  selector:
+    matchLabels:
+      app: drupal
+  template:
+    metadata:
+      labels:
+        app: drupal
+    spec:
+      initContainers:
+      - name: init-sites-default
+        image: drupal:10
+        command:
+          [
+            "sh",
+            "-c",
+            "cp -n /var/www/html/sites/default/default.settings.php /mnt/sites-default/settings.php && cp -rn /var/www/html/sites/default/* /mnt/sites-default/ || true && chmod 666 /mnt/sites-default/settings.php"
+          ]
+        volumeMounts:
+        - name: drupal-storage
+          mountPath: /mnt/sites-default
+      - name: fix-permissions
+        image: drupal:10
+        command:
+          [
+            "sh",
+            "-c",
+            "if [ -f /mnt/sites-default/settings.php ] && grep -q 'drupal_hash_salt' /mnt/sites-default/settings.php; then chmod 644 /mnt/sites-default/settings.php && chmod 755 /mnt/sites-default; fi"
+          ]
+        volumeMounts:
+        - name: drupal-storage
+          mountPath: /mnt/sites-default
+      containers:
+      - name: drupal
+        image: drupal:10
+        ports:
+        - containerPort: 80
+        env:
+        - name: DRUPAL_DB_HOST
+          value: mariadb
+        - name: DRUPAL_DB_NAME
+          value: drupal
+        - name: DRUPAL_DB_USER
+          value: drupal
+        - name: DRUPAL_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-secret
+              key: database-password
+        volumeMounts:
+        - name: drupal-storage
+          mountPath: /var/www/html/sites/default
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+      volumes:
+      - name: drupal-storage
+        persistentVolumeClaim:
+          claimName: drupal-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: drupal-service
+spec:
+  type: NodePort
+  selector:
+    app: drupal
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    nodePort: 30080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: drupal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: drupal-service
+            port:
+              number: 80
