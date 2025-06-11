@@ -15,8 +15,8 @@ metadata:
   name: mariadb-secret
 type: Opaque
 data:
-  database-password: ZHJ1cGFscGFzcw==  # 'drupalpass' encodat Base64
-  database-root-password: cm9vdHBhc3M=  # 'rootpass' encodat Base64
+  database-password: ZHJ1cGFscGFzcw==
+  database-root-password: cm9vdHBhc3M=
 ---
 apiVersion: apps/v1
 kind: Deployment

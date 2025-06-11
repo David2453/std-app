@@ -11,13 +11,13 @@ import java.util.List;
 @Repository
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
     
-    // Găsește toate mesajele ordonate după timestamp (cronologic)
+    // toate mesajele ordonate dupa timestamp
     List<ChatMessage> findAllByOrderByTimestampAsc();
     
-    // Găsește cele mai recente n mesaje ordonate după timestamp
+    // cele mai recente n mesaje 
     @Query("SELECT m FROM ChatMessage m ORDER BY m.timestamp DESC LIMIT :limit")
     List<ChatMessage> findRecentMessages(@Param("limit") int limit);
     
-    // Alternativă pentru JPA standard dacă LIMIT nu funcționează în unele versiuni
+    // alternativa pentru jpa daca limit nu functioneaza
     List<ChatMessage> findTop50ByOrderByTimestampDesc();
 }

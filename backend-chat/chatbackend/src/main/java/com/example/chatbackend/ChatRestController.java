@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/chat")
-@CrossOrigin(origins = "*") // Pentru dezvoltare locală, în producție specifică doar originile necesare
+@CrossOrigin(origins = "*")
 public class ChatRestController {
     
     private final ChatMessageService chatMessageService;

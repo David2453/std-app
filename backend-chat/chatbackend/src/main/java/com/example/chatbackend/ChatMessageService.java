@@ -33,13 +33,10 @@ public class ChatMessageService {
                 .collect(Collectors.toList());
     }
     
-    // Metoda pentru a obține cele mai recente mesaje
     public List<ChatMessage> getRecentMessages(int limit) {
         try {
-            // Încercăm să folosim query-ul cu LIMIT
             return chatMessageRepository.findRecentMessages(limit);
         } catch (Exception e) {
-            // Dacă nu funcționează, folosim metoda alternativă
             return chatMessageRepository.findTop50ByOrderByTimestampDesc();
         }
     }

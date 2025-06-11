@@ -30,10 +30,10 @@ public class ChatController {
     @MessageMapping("/send")
     @SendTo("/topic/messages")
     public ChatMessageDTO sendMessage(ChatMessageDTO messageDTO) {
-        // Salvează mesajul în baza de date
+        // salveaza mesajul in db
         ChatMessage savedMessage = chatMessageService.saveMessage(messageDTO.getUsername(), messageDTO.getContent());
         
-        // Returnează DTO-ul pentru a fi transmis înapoi la clienți
+        // returneaza dto
         return new ChatMessageDTO(
                 savedMessage.getId(),
                 savedMessage.getUsername(),

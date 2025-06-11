@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+//import { environment } from '../environments/environment';
 
 interface FileResult {
   success: boolean;
@@ -725,8 +726,7 @@ export class AppComponent {
   searchTerm = '';
   searchResults: any = null;
 
-  private apiUrl = 'http://localhost:3001/api';
-
+  private apiUrl = '/api';
   constructor(private http: HttpClient) {
     this.loadHistory();
   }

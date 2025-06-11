@@ -9,13 +9,11 @@ const sql = require('mssql');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = 3001;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Configurare Multer pentru upload fișiere
 const storage = multer.memoryStorage();
 const upload = multer({ 
     storage: storage,
@@ -24,7 +22,7 @@ const upload = multer({
     }
 });
 
-// Configurare Azure Blob Storage
+//  Blob Storage
 const blobServiceClient = BlobServiceClient.fromConnectionString(
     process.env.AZURE_STORAGE_CONNECTION_STRING
 );
@@ -32,13 +30,13 @@ const containerClient = blobServiceClient.getContainerClient(
     process.env.AZURE_STORAGE_CONTAINER_NAME
 );
 
-// Configurare Azure Text Analytics
+//Text Analytics
 const textAnalyticsClient = new TextAnalyticsClient(
     process.env.AZURE_LANGUAGE_ENDPOINT,
     new AzureKeyCredential(process.env.AZURE_LANGUAGE_KEY)
 );
 
-// Configurare SQL Database
+// Database
 const sqlConfig = {
     server: process.env.SQL_SERVER,
     database: process.env.SQL_DATABASE,
@@ -55,15 +53,12 @@ async function initializeServices() {
     try {
         console.log('🔧 Inițializez serviciile Azure...');
         
-        // Test Azure Blob Storage
         await containerClient.createIfNotExists();
         console.log('✅ Azure Blob Storage conectat');
         
-        // Test SQL Database
         await sql.connect(sqlConfig);
         console.log('✅ SQL Database conectat');
         
-        // Creează tabelul dacă nu există
         await createTablesIfNotExists();
         
         console.log('🚀 Toate serviciile sunt gata!');
@@ -73,7 +68,7 @@ async function initializeServices() {
     }
 }
 
-// Creează tabelul pentru metadate
+// tabelul pentru metadate
 async function createTablesIfNotExists() {
     const createTableQuery = `
         IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='FileProcessing' AND xtype='U')
@@ -96,8 +91,7 @@ async function createTablesIfNotExists() {
     console.log('✅ Tabel FileProcessing creat/verificat');
 }
 
-// RUTE API
-
+//rute
 // Ruta de test
 app.get('/api/health', (req, res) => {
     res.json({ 
@@ -107,7 +101,7 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// Upload și procesare fișier
+//upload si procesare fisier
 app.post('/api/upload', upload.single('file'), async (req, res) => {
     try {
         if (!req.file) {
@@ -118,15 +112,15 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
         const fileName = `${fileId}-${req.file.originalname}`;
         
         console.log(`📁 Procesez fișierul: ${req.file.originalname}`);
-
-        // 1. Upload în Azure Blob Storage
+        
+        //upload in blob storage
         const blockBlobClient = containerClient.getBlockBlobClient(fileName);
         await blockBlobClient.uploadData(req.file.buffer);
         
         const blobUrl = blockBlobClient.url;
         console.log('✅ Fișier încărcat în Blob Storage');
 
-        // 2. Salvează metadatele în SQL
+        // save in sql
         const request = new sql.Request();
         await request
             .input('id', sql.UniqueIdentifier, fileId)
@@ -142,7 +136,7 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
 
         console.log('✅ Metadate salvate în SQL');
 
-        // 3. Procesează textul pentru Entity Extraction (dacă e fișier text)
+        // procesarea textului cu AI
         let extractedEntities = null;
         try {
             if (req.file.mimetype.startsWith('text/') || 
@@ -170,7 +164,7 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
             console.error('⚠️ Eroare la procesarea AI:', aiError.message);
         }
 
-        // 4. Update rezultatul în SQL
+        // pdate rezultat in SQL
         await request
             .input('fileId', sql.UniqueIdentifier, fileId)
             .input('entities', sql.NVarChar, extractedEntities ? JSON.stringify(extractedEntities) : null)
@@ -202,7 +196,7 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
     }
 });
 
-// Obține istoricul fișierelor
+// get istoric fisiere
 app.get('/api/history', async (req, res) => {
     try {
         const request = new sql.Request();
@@ -236,7 +230,7 @@ app.get('/api/history', async (req, res) => {
     }
 });
 
-// Obține detalii fișier specific
+// detalii fisier specific
 app.get('/api/file/:id', async (req, res) => {
     try {
         const request = new sql.Request();
@@ -268,12 +262,11 @@ app.get('/api/file/:id', async (req, res) => {
 });
 
 
-// ADAUGĂ ACESTE RUTE ÎN server.js după rutele existente
 
-// Obține toate entitățile de un anumit tip
+// extrage entitati dupa anumit tip
 app.get('/api/entities/:type', async (req, res) => {
     try {
-        const entityType = req.params.type; // "Person", "Organization", "Location", etc.
+        const entityType = req.params.type;
         
         const request = new sql.Request();
         const result = await request.query(`
@@ -318,7 +311,7 @@ app.get('/api/entities/:type', async (req, res) => {
     }
 });
 
-// Obține statistici generale
+// statistici
 app.get('/api/stats', async (req, res) => {
     try {
         const request = new sql.Request();
@@ -362,7 +355,7 @@ app.get('/api/stats', async (req, res) => {
     }
 });
 
-// Export toate datele într-un format simplu
+// export date 
 app.get('/api/export', async (req, res) => {
     try {
         const request = new sql.Request();
@@ -406,7 +399,7 @@ app.get('/api/export', async (req, res) => {
     }
 });
 
-// Caută entități cu text specific
+// cautare entitati
 app.get('/api/search/:searchTerm', async (req, res) => {
     try {
         const searchTerm = req.params.searchTerm.toLowerCase();
@@ -454,7 +447,7 @@ app.get('/api/search/:searchTerm', async (req, res) => {
     }
 });
 
-// Pornește serverul
+// pronire server
 initializeServices().then(() => {
     app.listen(PORT, () => {
         console.log(`🚀 Backend pornit pe portul ${PORT}`);
